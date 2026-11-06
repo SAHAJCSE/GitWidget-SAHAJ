@@ -1,85 +1,233 @@
-<<<<<<< HEAD
-# Native Windows GitHub Desktop Widget (C# / .NET 8 / WPF)
+ <div align="center">
 
-This is the **100% native Windows implementation** built with **C# & XAML (WPF)**—the standard, native programming language for Windows desktop applications and widgets.
+<img src="assets/hero.svg" width="100%" alt="GitWidget-SAHAJ">
 
-### Why this is the proper native Windows solution:
-- **No Electron / No Web Browser overhead**: Uses pure Windows Presentation Foundation (WPF) and .NET 8.
-- **Microscopic memory usage**: Consumes ~15-25 MB of RAM compared to ~150 MB for Chromium/Electron.
-- **Native Windows API integration**:
-  - `ShowInTaskbar="False"`: It lives directly on your Windows desktop as a widget/gadget, not as a tab in your taskbar.
-  - **Auto-starts with Windows**: Writes to Windows Registry (`HKCU\Software\Microsoft\Windows\CurrentVersion\Run`) with a single click.
-  - **Position persistence**: Saves and restores exact screen coordinates to `%APPDATA%\GitHubDesktopWidget\config.json`.
-  - **No Gradients**: Flat, solid, crisp dark surfaces (`#0E1612`, `#0D1117`, `#000000`, `#051417`).
-  - **Circular contribution cells**: Rendered as native XAML vector `Ellipse` dots.
-  - **Hover tracking**: Hovering over any circle instantly displays the day's contribution count and date.
-  - **30D / 6M toggle**: Switch between 30 days and 6 months anytime from the header or right-click context menu.
+# GitWidget-SAHAJ
+
+### Your GitHub activity. Right on your Windows desktop.
+
+A minimal, ultra-lightweight native Windows widget that brings your GitHub contribution heatmap directly to your desktop.
+
+<p>
+<img src="https://img.shields.io/badge/Platform-Windows%2011-0078D4?style=flat-square&logo=windows" />
+<img src="https://img.shields.io/badge/Language-C%23-68217A?style=flat-square&logo=csharp" />
+<img src="https://img.shields.io/badge/Framework-WPF-512BD4?style=flat-square&logo=dotnet" />
+<img src="https://img.shields.io/badge/Refresh-15%20Minutes-16A34A?style=flat-square" />
+<img src="https://img.shields.io/badge/Design-Liquid%20Glass-black?style=flat-square" />
+</p>
+
+[Features](#-features) · [Screenshots](#-screenshots) · [Installation](#-installation) · [Customization](#-customization) · [Roadmap](#-roadmap)
+
+</div>
 
 ---
 
-### How to Build & Run:
+## ✦ About the project
 
-1. Install the free [.NET 8 SDK for Windows](https://dotnet.microsoft.com/download/dotnet/8.0).
-2. Open PowerShell in this `windows-native-csharp` folder:
-   ```powershell
-   cd windows-native-csharp
-   ```
-3. Run the widget directly:
-   ```powershell
-   dotnet run
-   ```
-4. Or compile a single standalone `.exe` with zero dependencies:
-   ```powershell
-   dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true
-   ```
-   The resulting `GitHubDesktopWidget.exe` will be located in:
-   `bin\Release\net8.0-windows\win-x64\publish\GitHubDesktopWidget.exe`
-   You can place it anywhere on your PC or desktop and double-click to run!
+**GitWidget-SAHAJ** is a lightweight GitHub contribution monitoring widget built specifically for Windows.
 
-=======
-# GitWidget-SAHAJ
+Instead of opening GitHub every time you want to check your coding activity, see your contribution heatmap directly on your desktop.
 
-1. Project overview
-GitWidget-SAHAJ is an ultra-compact GitHub activity monitor built for Windows 11. It brings GitHub's contribution graph to the desktop through a minimal floating widget.
+The philosophy is simple:
 
-The goal is to keep the application extremely lightweight (approximately 200 KB target), responsive, visually customizable, and efficient while automatically synchronizing GitHub contribution data every 15 minutes.
-2. Core features
-- GitHub contribution heatmap: Displays the yearly contribution history in a compact calendar layout.
-- Contribution statistics: Shows total contributions alongside the selected time range.
-- Time filters: Switch between 30-day and 6-month activity views.
-- Automatic updates: Refreshes GitHub data every 15 minutes.
-- Account connection: Connect using a GitHub username, such as SAHAJCSE.
-- Activity details: Optional expanded 12-month calendar and top repository commit details.
-- Desktop-only visibility: Appears on the desktop, not over other applications or fullscreen windows.
-- Compact design: Minimal screen footprint without unnecessary panels or information.
-3. Customization settings
-Your settings panel includes:
-Setting	Available options
-Color themes	Apple B&W, Apple Light, Liquid Glass, GitHub Classic, Midnight OLED, Aurora Teal
-Contribution shapes	Circle, Rounded, Square, Hexagon, Triangle, Flower
-Time range	Configurable activity periods
-GitHub account	Username connection
-Activity details	12-month calendar and top repositories
+**Less UI. Less resource usage. More focus.**
 
-Additional adjustments should include widget position, width, opacity, transparency, spacing, and automatic startup.
-4. Design language
-The interface follows an Apple-inspired minimalist design:
-- Liquid Glass-inspired appearance.
-- Dark translucent backgrounds.
-- Subtle borders and soft highlights.
-- Compact typography and spacing.
-- Customizable contribution shapes.
-- Minimal settings interface.
-- No unnecessary animations or resource-heavy effects.
-5. Technical specifications
-Specification	Target
-Application	GitWidget-SAHAJ
-Platform	Windows 11
-Framework	Native C# / WPF
-Target footprint	~200 KB
-Refresh interval	15 minutes
-Data source	GitHub public contribution data
-Network usage	Only during synchronization
-Interface	Lightweight desktop widget
-Display	Desktop only
->>>>>>> 7c66388cdd379becbd2bb6c7f3c205d66d365dbd
+The application is built using native C# and Windows Presentation Foundation (WPF), avoiding the overhead of Electron and browser-based desktop wrappers.
+
+## 🖥 Screenshots
+
+<div align="center">
+
+### Desktop Widget — Liquid Glass / GitHub Green
+
+<img src="assets/widget-green-desktop.png" width="85%" alt="GitWidget green contribution heatmap on desktop">
+
+*Minimal contribution heatmap with GitHub activity count.*
+
+<br/>
+
+### Desktop Widget — Dark Theme / Triangle Grid
+
+<img src="assets/widget-dark-desktop.png" width="85%" alt="GitWidget dark theme with triangle contribution cells">
+
+*Custom contribution shapes with a compact dark interface.*
+
+</div>
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+|---|---|
+| GitHub Heatmap | View your contribution activity visually |
+| Contribution Count | See your total contributions |
+| 30D / 6M | Switch between activity periods |
+| Auto Refresh | Automatic synchronization every 15 minutes |
+| Account Connection | Connect using your GitHub username |
+| Activity Details | Expanded 12-month calendar and top repository details |
+| Desktop Widget | Compact desktop-first interface |
+| Lightweight | Designed for minimal resource consumption |
+
+## 🎨 Customization
+
+### Color Themes
+
+Choose the appearance that matches your desktop.
+
+| Theme | Style |
+|---|---|
+| Apple B&W | Minimal monochrome |
+| Apple Light | Clean light appearance |
+| Liquid Glass | Translucent glass-inspired appearance |
+| GitHub Classic | Traditional GitHub green |
+| Midnight OLED | Deep black interface |
+| Aurora Teal | Modern teal accents |
+
+### Contribution Shapes
+
+Customize the appearance of individual contribution cells.
+
+`● Circle` · `▢ Rounded` · `■ Square` · `⬢ Hexagon` · `▲ Triangle` · `✿ Flower`
+
+### Widget Settings
+
+- GitHub username connection
+- Contribution time range
+- Theme selection
+- Contribution shape selection
+- Detailed activity and top repositories
+- Widget positioning and appearance adjustments
+
+---
+
+## ⚡ Lightweight Architecture
+
+Built with native Windows technologies rather than a browser-based runtime.
+
+| Component | Technology |
+|---|---|
+| Language | C# |
+| UI Framework | WPF |
+| Platform | Windows 10 / 11 |
+| Data Source | GitHub contribution data |
+| Refresh Interval | 15 minutes |
+| Configuration | Local application settings |
+
+**Optimization target:** Approximately 200 KB application footprint. Actual packaged size depends on deployment and runtime dependencies.
+
+---
+
+## 🚀 Installation
+
+### Requirements
+
+- Windows 10 or Windows 11
+- .NET 8 SDK
+- Git
+
+### Clone the repository
+
+```bash
+git clone https://github.com/SAHAJCSE/GitWidget-SAHAJ.git
+```
+
+### Navigate to the application
+
+```bash
+cd GitWidget-SAHAJ/windows-native-csharp
+```
+
+### Restore dependencies
+
+```bash
+dotnet restore
+```
+
+### Run the widget
+
+```bash
+dotnet run
+```
+
+### Build for Windows
+
+```bash
+dotnet publish -c Release -r win-x64 --self-contained false
+```
+
+The published application will be available inside the project's `bin/Release` directory.
+
+---
+
+## 📂 Project Structure
+
+```text
+GitWidget-SAHAJ/
+│
+├── assets/
+│   ├── hero.svg
+│   ├── widget-green-desktop.png
+│   └── widget-dark-desktop.png
+│
+├── windows-native-csharp/
+│   ├── Assets/
+│   ├── Models/
+│   ├── Services/
+│   ├── App.xaml
+│   ├── MainWindow.xaml
+│   ├── SettingsWindow.xaml
+│   └── GithubWidget.csproj
+│
+└── README.md
+```
+
+---
+
+## 🗺 Roadmap
+
+- [x] Native Windows widget concept
+- [x] GitHub contribution heatmap
+- [x] Compact desktop interface
+- [x] Multiple color themes
+- [x] Custom contribution shapes
+- [x] 30-day and 6-month views
+- [x] Settings interface
+- [ ] Further memory and startup optimization
+- [ ] Multi-monitor positioning improvements
+- [ ] Final application packaging and size optimization
+
+---
+
+## 💡 Why GitWidget?
+
+Most developers use GitHub to track their progress, but checking contribution activity requires opening a browser.
+
+GitWidget makes that information instantly accessible.
+
+No unnecessary dashboard. No browser tabs. Just your coding activity, always in sight.
+
+---
+
+## 🤝 Contributing
+
+Contributions, suggestions and improvements are welcome.
+
+1. Fork this repository.
+2. Create a feature branch.
+3. Make your changes.
+4. Submit a Pull Request.
+
+---
+
+<div align="center">
+
+### Built for developers. Designed for simplicity.
+
+**GitWidget-SAHAJ**
+
+[GitHub Repository](https://github.com/SAHAJCSE/GitWidget-SAHAJ)
+
+⭐ If you like the project, consider giving it a star!
+
+</div>
