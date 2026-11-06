@@ -2,8 +2,6 @@
 
 <p align="center">
   <img src="https://cdn.simpleicons.org/github/FFFFFF" width="42" alt="GitHub Logo" />
-  &nbsp;&nbsp;
-  <img src="https://cdn.simpleicons.org/windows11/0078D4" width="42" alt="Windows Logo" />
 </p>
 
 <h3 align="center">Your GitHub Activity, Right on Your Desktop.</h3>
