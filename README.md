@@ -41,34 +41,44 @@ GitWidget is a small desktop widget that lets you check your GitHub activity wit
 - Offers multiple themes and customization options.
 - Runs directly on your Windows desktop.
 
+<a id="-screenshots" name="-screenshots"></a>
 ## Screenshots
 
 ### Contribution Heatmap
 
 **6-Month & 1-Year Views**
 
-<img src="images/image6mongithubstyle.png" width="90%" alt="GitWidget contribution heatmap" />
+<p align="center">
+  <img src="images/6monthgraph.png" width="90%" alt="GitWidget 6-month contribution heatmap" />
+  <br /><br />
+  <img src="images/1yeargraph.png" width="90%" alt="GitWidget 1-year contribution heatmap" />
+</p>
 
 ### 30-Day Views
 
 <table>
   <tr>
     <td width="50%" align="center">
-      **Apple Monochrome**
+      <b>Apple Monochrome</b>
       <br /><br />
       <img src="images/image30Dblackandwhite.png" width="100%" alt="Apple monochrome theme" />
     </td>
     <td width="50%" align="center">
-      **Liquid Glass**
+      <b>Liquid Glass</b>
       <br /><br />
       <img src="images/liquidglass30d.png" width="100%" alt="Liquid glass theme" />
     </td>
   </tr>
   <tr>
-    <td colspan="2" align="center">
-      **GitHub Classic**
+    <td width="50%" align="center">
+      <b>GitHub Classic</b>
       <br /><br />
-      <img src="images/image30Dgithubstyle.png" width="70%" alt="GitHub classic theme" />
+      <img src="images/classic30d.png" width="100%" alt="GitHub classic theme" />
+    </td>
+    <td width="50%" align="center">
+      <b>Aurora Teal</b>
+      <br /><br />
+      <img src="images/blueaurora30D.png" width="100%" alt="Aurora teal theme" />
     </td>
   </tr>
 </table>
@@ -78,14 +88,14 @@ GitWidget is a small desktop widget that lets you check your GitHub activity wit
 <table>
   <tr>
     <td width="50%" align="center">
-      **Settings**
+      <b>Settings</b>
       <br /><br />
       <img src="images/settings1.png" width="100%" alt="Settings panel" />
     </td>
     <td width="50%" align="center">
-      **Activity Analytics**
+      <b>Activity Analytics</b>
       <br /><br />
-      <img src="images/setting2.png" width="100%" alt="Activity analytics" />
+      <img src="images/detailedanalysis.png" width="100%" alt="Activity analytics" />
     </td>
   </tr>
 </table>
