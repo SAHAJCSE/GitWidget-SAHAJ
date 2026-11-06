@@ -73,6 +73,9 @@ namespace GitHubDesktopWidget
             _configPath = System.IO.Path.Combine(folder, "config.json");
 
             LoadConfig();
+            SoundService.IsMuted = _config.MuteSound;
+            MenuSound.IsChecked = !_config.MuteSound;
+            MenuSound.Header = _config.MuteSound ? "Sound Effects (Muted)" : "Sound Effects (Enabled)";
             ApplyTheme(_config.Theme);
             ApplyRangeUI();
             ApplyShapeUI();
@@ -114,6 +117,7 @@ namespace GitHubDesktopWidget
             BotContainer.MouseLeftButtonDown += (s, e) =>
             {
                 e.Handled = true;
+                CycleBotMood();
                 AnimateColumnsEntrance(true);
             };
         }
@@ -144,8 +148,7 @@ namespace GitHubDesktopWidget
                 blinkAnim.KeyFrames.Add(new LinearDoubleKeyFrame(0.08, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(130))));
                 blinkAnim.KeyFrames.Add(new LinearDoubleKeyFrame(1.0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(220))));
 
-                BotEyeScaleL?.BeginAnimation(ScaleTransform.ScaleYProperty, blinkAnim);
-                BotEyeScaleR?.BeginAnimation(ScaleTransform.ScaleYProperty, blinkAnim);
+                BotEyesScale?.BeginAnimation(ScaleTransform.ScaleYProperty, blinkAnim);
             }
             catch { }
         }
@@ -415,7 +418,8 @@ namespace GitHubDesktopWidget
         {
             if (_currentData == null) return;
             string targetText = _currentData.TotalCount.ToString("N0");
-            string labelText = $"{(_config.Range == "30d" ? "30D" : "6M")} contributions";
+            string rangeLabel = _config.Range == "30d" ? "30D" : (_config.Range == "1y" ? "1Y" : "6M");
+            string labelText = $"{rangeLabel} contributions";
 
             if (animated)
             {
@@ -582,6 +586,8 @@ namespace GitHubDesktopWidget
                     // Hover to show daily contributions with bouncy scale + gradient + rolling stat counter
                     shape.MouseEnter += (s, e) =>
                     {
+                        SoundService.PlayPop();
+
                         // 1. Luminous gradient on hover
                         if (shape is Shape shp)
                         {
@@ -729,9 +735,27 @@ namespace GitHubDesktopWidget
             MonthLabelsGrid.BeginAnimation(UIElement.OpacityProperty, monthFadeIn);
         }
 
+        private static readonly string[] BotMoods = new[] { "happy", "excited", "calm", "bored", "sleepy", "angry" };
+        private int _currentMoodIndex = 0;
+
+        public void CycleBotMood()
+        {
+            _currentMoodIndex = (_currentMoodIndex + 1) % BotMoods.Length;
+            string nextMood = BotMoods[_currentMoodIndex];
+            _config.BotMood = nextMood;
+            SaveConfig();
+            ApplyBotMood(nextMood, isUserClick: true);
+        }
+
         private void UpdateBotExpression()
         {
             if (_currentData == null) return;
+
+            if (!string.IsNullOrWhiteSpace(_config.BotMood))
+            {
+                ApplyBotMood(_config.BotMood);
+                return;
+            }
 
             string todayStr = DateTime.Today.ToString("yyyy-MM-dd");
             int todayCount = 0;
@@ -753,55 +777,134 @@ namespace GitHubDesktopWidget
                 if (foundToday) break;
             }
 
-            bool isMono = _config.Theme == "mono";
-            bool isLight = _config.Theme == "light";
+            int hour = DateTime.Now.Hour;
+            string autoMood;
 
-            if (todayCount > 0)
-            {
-                // Happy smile arc
-                BotMouthPath.Data = Geometry.Parse("M 8.5,13.5 Q 11,16.5 13.5,13.5");
-                BotMouthPath.Stroke = Brushes.White;
-                BotLeftEye.Fill = Brushes.White;
-                BotRightEye.Fill = Brushes.White;
-
-                if (isMono)
-                {
-                    BotGradStop1.Color = Color.FromRgb(180, 180, 180);
-                    BotGradStop2.Color = Color.FromRgb(95, 95, 95);
-                    BotGradStop3.Color = Color.FromRgb(40, 40, 45);
-                }
-                else
-                {
-                    BotGradStop1.Color = Color.FromRgb(0x58, 0xD7, 0x7B);
-                    BotGradStop2.Color = Color.FromRgb(0x2E, 0xA0, 0x43);
-                    BotGradStop3.Color = Color.FromRgb(0x12, 0x4A, 0x24);
-                }
-
-                BotContainer.ToolTip = $"{todayCount} contributions today! Bot is happy :)";
-            }
+            if (todayCount >= 5)
+                autoMood = "excited";
+            else if (todayCount >= 1)
+                autoMood = "happy";
+            else if (hour >= 23 || hour < 6)
+                autoMood = "sleepy";
             else
+                autoMood = "bored";
+
+            ApplyBotMood(autoMood);
+        }
+
+        private void ApplyBotMood(string mood, bool isUserClick = false)
+        {
+            mood = mood.ToLowerInvariant();
+            BotLightningBadge.Visibility = Visibility.Collapsed;
+            BotSleepyMouth.Visibility = Visibility.Collapsed;
+            BotMouthPath.Visibility = Visibility.Visible;
+
+            SolidColorBrush strokeBrush;
+
+            switch (mood)
             {
-                // Sad frown arc
-                BotMouthPath.Data = Geometry.Parse("M 8.5,16 Q 11,13.5 13.5,16");
-                var dimBrush = isLight ? new SolidColorBrush(Color.FromRgb(180, 180, 180)) : new SolidColorBrush(Color.FromRgb(140, 150, 145));
-                BotMouthPath.Stroke = dimBrush;
-                BotLeftEye.Fill = dimBrush;
-                BotRightEye.Fill = dimBrush;
+                case "excited":
+                    // Electric Gold / Yellow with Lightning Badge
+                    BotLightningBadge.Visibility = Visibility.Visible;
+                    BotGradStop1.Color = Color.FromRgb(0xFF, 0xD2, 0x3F);
+                    BotGradStop2.Color = Color.FromRgb(0xFF, 0xAA, 0x00);
+                    BotGradStop3.Color = Color.FromRgb(0xC6, 0x78, 0x00);
+                    strokeBrush = new SolidColorBrush(Color.FromRgb(0x4A, 0x32, 0x00));
 
-                if (isLight)
-                {
-                    BotGradStop1.Color = Color.FromRgb(190, 195, 200);
-                    BotGradStop2.Color = Color.FromRgb(140, 145, 150);
-                    BotGradStop3.Color = Color.FromRgb(100, 105, 110);
-                }
-                else
-                {
-                    BotGradStop1.Color = Color.FromRgb(75, 95, 80);
-                    BotGradStop2.Color = Color.FromRgb(42, 55, 46);
-                    BotGradStop3.Color = Color.FromRgb(20, 28, 23);
-                }
+                    BotLeftEyePath.Data = Geometry.Parse("M 0,3.5 L 3.5,0.5 L 7,3.5");
+                    BotRightEyePath.Data = Geometry.Parse("M 0,3.5 L 3.5,0.5 L 7,3.5");
+                    BotMouthPath.Data = Geometry.Parse("M 0,0 Q 4.5,6.5 9,0 Z");
+                    BotContainer.ToolTip = "Excited! ⚡ Wow, incredible momentum on your contributions!";
+                    if (isUserClick) SoundService.PlayChime();
+                    break;
 
-                BotContainer.ToolTip = "0 contributions today. Bot is sad :(";
+                case "angry":
+                    // Vibrant Coral Orange, furrowed brows & pout frown
+                    BotGradStop1.Color = Color.FromRgb(0xFF, 0x7E, 0x52);
+                    BotGradStop2.Color = Color.FromRgb(0xE8, 0x54, 0x2A);
+                    BotGradStop3.Color = Color.FromRgb(0xA8, 0x28, 0x0E);
+                    strokeBrush = new SolidColorBrush(Color.FromRgb(0x45, 0x12, 0x05));
+
+                    BotLeftEyePath.Data = Geometry.Parse("M 0,1 L 7,5 M 0,6 L 6.5,3");
+                    BotRightEyePath.Data = Geometry.Parse("M 7,1 L 0,5 M 7,6 L 0.5,3");
+                    BotMouthPath.Data = Geometry.Parse("M 0,4 Q 4.5,-2 9,4");
+                    BotContainer.ToolTip = "Angry! 😤 0 commits today! Time to write some code!";
+                    if (isUserClick) SoundService.PlayAngry();
+                    break;
+
+                case "sleepy":
+                    // Soft Sky Blue, drooping lids, yawn mouth
+                    BotGradStop1.Color = Color.FromRgb(0x89, 0xC4, 0xFF);
+                    BotGradStop2.Color = Color.FromRgb(0x56, 0x9D, 0xF0);
+                    BotGradStop3.Color = Color.FromRgb(0x28, 0x64, 0xB8);
+                    strokeBrush = new SolidColorBrush(Color.FromRgb(0x10, 0x28, 0x48));
+
+                    BotLeftEyePath.Data = Geometry.Parse("M 0,0 Q 3.5,4 7,0");
+                    BotRightEyePath.Data = Geometry.Parse("M 0,0 Q 3.5,4 7,0");
+                    BotMouthPath.Visibility = Visibility.Collapsed;
+                    BotSleepyMouth.Visibility = Visibility.Visible;
+                    BotContainer.ToolTip = "Sleepy... 😴 Yaaawn, coding late? Remember to get some rest!";
+                    if (isUserClick) SoundService.PlaySleepy();
+                    break;
+
+                case "bored":
+                    // Soft Rose Pink, flat horizontal lines
+                    BotGradStop1.Color = Color.FromRgb(0xFF, 0xA4, 0xC9);
+                    BotGradStop2.Color = Color.FromRgb(0xE8, 0x74, 0xA2);
+                    BotGradStop3.Color = Color.FromRgb(0xAC, 0x3E, 0x6C);
+                    strokeBrush = new SolidColorBrush(Color.FromRgb(0x48, 0x10, 0x28));
+
+                    BotLeftEyePath.Data = Geometry.Parse("M 0,2 L 7,2");
+                    BotRightEyePath.Data = Geometry.Parse("M 0,2 L 7,2");
+                    BotMouthPath.Data = Geometry.Parse("M 0,0 L 9,0");
+                    BotContainer.ToolTip = "Bored... 🥱 Just waiting here for your next commit!";
+                    if (isUserClick) SoundService.PlayPop();
+                    break;
+
+                case "calm":
+                    // Pastel Lavender Purple, round dot eyes, gentle smile
+                    BotGradStop1.Color = Color.FromRgb(0xC0, 0x8F, 0xFF);
+                    BotGradStop2.Color = Color.FromRgb(0x9E, 0x64, 0xF0);
+                    BotGradStop3.Color = Color.FromRgb(0x6A, 0x30, 0xC0);
+                    strokeBrush = new SolidColorBrush(Color.FromRgb(0x28, 0x10, 0x48));
+
+                    BotLeftEyePath.Data = Geometry.Parse("M 3.5,1.5 A 1.8,1.8 0 1,1 3.49,1.5 Z");
+                    BotRightEyePath.Data = Geometry.Parse("M 3.5,1.5 A 1.8,1.8 0 1,1 3.49,1.5 Z");
+                    BotMouthPath.Data = Geometry.Parse("M 0,0 Q 4.5,4 9,0");
+                    BotContainer.ToolTip = "Calm 🧘 Steady, consistent progress.";
+                    if (isUserClick) SoundService.PlayTick();
+                    break;
+
+                default: // happy
+                    // Lush Lime / Emerald Green, peaceful upward arches & smile
+                    BotGradStop1.Color = Color.FromRgb(0x99, 0xE8, 0x70);
+                    BotGradStop2.Color = Color.FromRgb(0x58, 0xB8, 0x38);
+                    BotGradStop3.Color = Color.FromRgb(0x2E, 0x6A, 0x1C);
+                    strokeBrush = new SolidColorBrush(Color.FromRgb(0x1E, 0x40, 0x10));
+
+                    BotLeftEyePath.Data = Geometry.Parse("M 0,3.5 Q 3.5,0 7,3.5");
+                    BotRightEyePath.Data = Geometry.Parse("M 0,3.5 Q 3.5,0 7,3.5");
+                    BotMouthPath.Data = Geometry.Parse("M 0,0 Q 4.5,4.5 9,0");
+                    BotContainer.ToolTip = "Happy! 😊 Great job keeping your commit streak alive!";
+                    if (isUserClick) SoundService.PlayChime();
+                    break;
+            }
+
+            BotLeftEyePath.Stroke = strokeBrush;
+            BotRightEyePath.Stroke = strokeBrush;
+            BotMouthPath.Stroke = strokeBrush;
+
+            if (isUserClick)
+            {
+                var bounce = new DoubleAnimation(1.0, 1.3, TimeSpan.FromMilliseconds(130))
+                {
+                    AutoReverse = true,
+                    EasingFunction = new BackEase { Amplitude = 0.5, EasingMode = EasingMode.EaseOut }
+                };
+                BotContainer.RenderTransform = new ScaleTransform(1.0, 1.0);
+                BotContainer.RenderTransformOrigin = new Point(0.5, 0.5);
+                BotContainer.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, bounce);
+                BotContainer.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, bounce);
             }
         }
 
@@ -994,27 +1097,39 @@ namespace GitHubDesktopWidget
 
         private void ApplyRangeUI()
         {
-            bool is30d = _config.Range == "30d";
+            string r = (_config.Range ?? "6m").ToLowerInvariant();
+            bool is30d = r == "30d";
+            bool is6m = r == "6m";
+            bool is1y = r == "1y" || r == "12m";
+
             Btn30D.Background = is30d ? new SolidColorBrush(Color.FromArgb(60, 88, 215, 123)) : Brushes.Transparent;
             Btn30D.Foreground = is30d ? (SolidColorBrush)new BrushConverter().ConvertFromString("#58D77B")! : (SolidColorBrush)new BrushConverter().ConvertFromString("#888888")!;
 
-            Btn6M.Background = !is30d ? new SolidColorBrush(Color.FromArgb(60, 88, 215, 123)) : Brushes.Transparent;
-            Btn6M.Foreground = !is30d ? (SolidColorBrush)new BrushConverter().ConvertFromString("#58D77B")! : (SolidColorBrush)new BrushConverter().ConvertFromString("#888888")!;
+            Btn6M.Background = is6m ? new SolidColorBrush(Color.FromArgb(60, 88, 215, 123)) : Brushes.Transparent;
+            Btn6M.Foreground = is6m ? (SolidColorBrush)new BrushConverter().ConvertFromString("#58D77B")! : (SolidColorBrush)new BrushConverter().ConvertFromString("#888888")!;
+
+            Btn1Y.Background = is1y ? new SolidColorBrush(Color.FromArgb(60, 88, 215, 123)) : Brushes.Transparent;
+            Btn1Y.Foreground = is1y ? (SolidColorBrush)new BrushConverter().ConvertFromString("#58D77B")! : (SolidColorBrush)new BrushConverter().ConvertFromString("#888888")!;
 
             MenuRange30D.IsChecked = is30d;
-            MenuRange6M.IsChecked = !is30d;
+            MenuRange6M.IsChecked = is6m;
+            MenuRange1Y.IsChecked = is1y;
             UpdateHeaderResponsiveness();
         }
 
         public async void SetRange(string range)
         {
+            SoundService.PlayTick();
             _config.Range = range;
             ApplyRangeUI();
 
-            // When user switches to 30d, make the widget compact!
             if (range == "30d")
             {
                 Width = 195;
+            }
+            else if (range == "1y" || range == "12m")
+            {
+                Width = 840;
             }
             else
             {
@@ -1028,6 +1143,20 @@ namespace GitHubDesktopWidget
 
         private void Btn30D_Click(object sender, RoutedEventArgs e) => SetRange("30d");
         private void Btn6M_Click(object sender, RoutedEventArgs e) => SetRange("6m");
+        private void Btn1Y_Click(object sender, RoutedEventArgs e) => SetRange("1y");
+
+        private void MenuRange30D_Click(object sender, RoutedEventArgs e) => SetRange("30d");
+        private void MenuRange6M_Click(object sender, RoutedEventArgs e) => SetRange("6m");
+        private void MenuRange1Y_Click(object sender, RoutedEventArgs e) => SetRange("1y");
+
+        private void MenuSound_Click(object sender, RoutedEventArgs e)
+        {
+            _config.MuteSound = !_config.MuteSound;
+            SoundService.IsMuted = _config.MuteSound;
+            MenuSound.IsChecked = !_config.MuteSound;
+            MenuSound.Header = _config.MuteSound ? "Sound Effects (Muted)" : "Sound Effects (Enabled)";
+            SaveConfig();
+        }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -1212,8 +1341,6 @@ namespace GitHubDesktopWidget
             }
         }
 
-        private void MenuRange30D_Click(object sender, RoutedEventArgs e) => SetRange("30d");
-        private void MenuRange6M_Click(object sender, RoutedEventArgs e) => SetRange("6m");
         private async void MenuRefresh_Click(object sender, RoutedEventArgs e) => await RefreshDataAsync(true);
 
         private void MenuProfile_Click(object sender, RoutedEventArgs e)

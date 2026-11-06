@@ -290,12 +290,16 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <Border x:Name="Range30DBtn" Grid.Column="0" CornerRadius="6" Padding="0,5" Background="Transparent" Cursor="Hand" MouseLeftButtonDown="Range30D_Click">
-                                        <TextBlock Text="30 Days (Compact)" Foreground="#FFFFFF" FontSize="11" HorizontalAlignment="Center" FontWeight="Medium"/>
+                                        <TextBlock Text="30 Days" Foreground="#FFFFFF" FontSize="11" HorizontalAlignment="Center" FontWeight="Medium"/>
                                     </Border>
                                     <Border x:Name="Range6MBtn" Grid.Column="1" CornerRadius="6" Padding="0,5" Background="#2C2C32" Cursor="Hand" MouseLeftButtonDown="Range6M_Click">
-                                        <TextBlock Text="6 Months (Full)" Foreground="#FFFFFF" FontSize="11" HorizontalAlignment="Center" FontWeight="Medium"/>
+                                        <TextBlock Text="6 Months" Foreground="#FFFFFF" FontSize="11" HorizontalAlignment="Center" FontWeight="Medium"/>
+                                    </Border>
+                                    <Border x:Name="Range1YBtn" Grid.Column="2" CornerRadius="6" Padding="0,5" Background="Transparent" Cursor="Hand" MouseLeftButtonDown="Range1Y_Click">
+                                        <TextBlock Text="1 Year" Foreground="#FFFFFF" FontSize="11" HorizontalAlignment="Center" FontWeight="Medium"/>
                                     </Border>
                                 </Grid>
                             </Border>
@@ -307,8 +311,20 @@
                         <StackPanel>
                             <TextBlock Text="DESKTOP BEHAVIOR" FontSize="10" FontWeight="Bold" Foreground="#8E8E93" FontFamily="Consolas" Margin="0,0,0,8"/>
 
+                            <!-- Sound Effects Toggle -->
+                            <Grid Margin="0,4,0,8" Cursor="Hand" MouseLeftButtonDown="ToggleSound_Click">
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Sound Effects" Foreground="#FFFFFF" FontSize="12" FontWeight="Medium"/>
+                                    <TextBlock Text="Play interactive tactile micro-sounds and character chimes" Foreground="#8E8E93" FontSize="10"/>
+                                </StackPanel>
+                                <Border x:Name="ToggleSoundSwitch" HorizontalAlignment="Right" Width="36" Height="20" CornerRadius="10" Background="#34C759" VerticalAlignment="Center">
+                                    <Ellipse x:Name="ToggleSoundThumb" Width="16" Height="16" Fill="#FFFFFF" HorizontalAlignment="Right" Margin="2,0,2,0"/>
+                                </Border>
+                            </Grid>
+                            <Separator Background="#2A2A2E" Margin="0,2,0,8"/>
+
                             <!-- Pin to Desktop Toggle -->
-                            <Grid Margin="0,4,0,8" Cursor="Hand" MouseLeftButtonDown="TogglePin_Click">
+                            <Grid Margin="0,0,0,8" Cursor="Hand" MouseLeftButtonDown="TogglePin_Click">
                                 <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="Keep on Desktop" Foreground="#FFFFFF" FontSize="12" FontWeight="Medium"/>
                                     <TextBlock Text="Pins widget to wallpaper behind other applications" Foreground="#8E8E93" FontSize="10"/>

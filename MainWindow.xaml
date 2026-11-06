@@ -55,7 +55,8 @@
             <Separator />
             <MenuItem Header="Time Range">
                 <MenuItem x:Name="MenuRange30D" Header="30 Days (Compact)" Click="MenuRange30D_Click" />
-                <MenuItem x:Name="MenuRange6M" Header="6 Months (Full)" IsChecked="True" Click="MenuRange6M_Click" />
+                <MenuItem x:Name="MenuRange6M" Header="6 Months (Standard)" IsChecked="True" Click="MenuRange6M_Click" />
+                <MenuItem x:Name="MenuRange1Y" Header="1 Year (Annual)" Click="MenuRange1Y_Click" />
             </MenuItem>
             <MenuItem Header="Themes">
                 <MenuItem x:Name="MenuThemeMono" Header="Apple Monochrome (B&amp;W)" Click="MenuTheme_Click" Tag="mono" />
@@ -77,6 +78,7 @@
             <MenuItem x:Name="MenuLock" Header="Disable Moving (Lock)" Click="MenuLock_Click" />
             <MenuItem x:Name="MenuTopmost" Header="Keep on Desktop (Behind Apps)" IsChecked="True" Click="MenuTopmost_Click" />
             <MenuItem x:Name="MenuStartup" Header="Start with Windows" IsChecked="True" Click="MenuStartup_Click" />
+            <MenuItem x:Name="MenuSound" Header="Sound Effects (Enabled)" IsChecked="True" Click="MenuSound_Click" />
             <MenuItem Header="Refresh Activity" Click="MenuRefresh_Click" />
             <MenuItem Header="Open GitHub Profile" Click="MenuProfile_Click" />
             <Separator />
@@ -138,24 +140,34 @@
                         </Border>
                         <TextBlock x:Name="StatLabelText" Text="6M contributions" FontSize="10" Foreground="#9CB1A2" Margin="7,0,0,3" VerticalAlignment="Bottom" FontFamily="Consolas"/>
 
-                        <!-- Glossy Plastic Triangle Bot Companion -->
-                        <Grid x:Name="BotContainer" Width="22" Height="20" VerticalAlignment="Bottom" Margin="8,0,0,3" Cursor="Hand" ToolTip="Plastic Bot Companion">
-                            <!-- Triangular glossy plastic body with rounded vertexes -->
-                            <Path x:Name="BotBody"
-                                  Data="M 11,2 C 12.1,2 12.9,2.8 13.6,4.1 L 20.6,16.5 C 21.3,17.7 20.5,19.2 19.1,19.2 L 2.9,19.2 C 1.5,19.2 0.7,17.7 1.4,16.5 L 8.4,4.1 C 9.1,2.8 9.9,2 11,2 Z"
-                                  Stroke="#40FFFFFF"
-                                  StrokeThickness="0.6">
-                                <Path.Fill>
-                                    <RadialGradientBrush Center="0.5,0.4" GradientOrigin="0.4,0.3" RadiusX="0.8" RadiusY="0.8">
-                                        <GradientStop x:Name="BotGradStop1" Color="#58D77B" Offset="0"/>
-                                        <GradientStop x:Name="BotGradStop2" Color="#2EA043" Offset="0.55"/>
-                                        <GradientStop x:Name="BotGradStop3" Color="#124A24" Offset="1"/>
-                                    </RadialGradientBrush>
-                                </Path.Fill>
-                            </Path>
+                        <!-- Expressive Companion Bot Character (34x30) with 6 Emotions -->
+                        <Grid x:Name="BotContainer" Width="34" Height="30" VerticalAlignment="Bottom" Margin="8,0,0,2" Cursor="Hand" ToolTip="Click to interact with Bot!">
+                            <!-- Optional Electric Lightning Emblem for Excited mood -->
+                            <Path x:Name="BotLightningBadge"
+                                  Data="M 17,2 L 23,12 L 17,14 L 21,24 L 11,14 L 17,12 Z"
+                                  Fill="#FFD23F"
+                                  Stretch="Uniform"
+                                  Width="32" Height="30"
+                                  Visibility="Collapsed"
+                                  Opacity="0.85"/>
 
-                            <!-- Glossy specular reflection highlight (gives the plastic texture shine) -->
-                            <Ellipse Width="10" Height="4" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3.5,0,0" Opacity="0.75">
+                            <!-- Character Body Badge (Round / Squircle) -->
+                            <Rectangle x:Name="BotBody"
+                                       Width="30" Height="27"
+                                       RadiusX="13" RadiusY="13"
+                                       Stroke="#40FFFFFF"
+                                       StrokeThickness="0.8">
+                                <Rectangle.Fill>
+                                    <RadialGradientBrush Center="0.5,0.4" GradientOrigin="0.4,0.3" RadiusX="0.8" RadiusY="0.8">
+                                        <GradientStop x:Name="BotGradStop1" Color="#99E870" Offset="0"/>
+                                        <GradientStop x:Name="BotGradStop2" Color="#58B838" Offset="0.6"/>
+                                        <GradientStop x:Name="BotGradStop3" Color="#2E6A1C" Offset="1"/>
+                                    </RadialGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+
+                            <!-- Top Specular Gloss Reflection Highlight -->
+                            <Ellipse Width="15" Height="6" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,3,0,0" Opacity="0.75">
                                 <Ellipse.Fill>
                                     <RadialGradientBrush Center="0.5,0.5" GradientOrigin="0.5,0.3" RadiusX="0.5" RadiusY="0.5">
                                         <GradientStop Color="#CCFFFFFF" Offset="0"/>
@@ -164,37 +176,57 @@
                                 </Ellipse.Fill>
                             </Ellipse>
 
-                            <!-- Small expressive eyes with blinking transform -->
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,8.5,0,0">
-                                <Ellipse x:Name="BotLeftEye" Width="2.4" Height="2.4" Fill="#FFFFFF" Margin="0,0,4,0" RenderTransformOrigin="0.5,0.5">
-                                    <Ellipse.RenderTransform>
-                                        <ScaleTransform x:Name="BotEyeScaleL" ScaleY="1.0"/>
-                                    </Ellipse.RenderTransform>
-                                </Ellipse>
-                                <Ellipse x:Name="BotRightEye" Width="2.4" Height="2.4" Fill="#FFFFFF" RenderTransformOrigin="0.5,0.5">
-                                    <Ellipse.RenderTransform>
-                                        <ScaleTransform x:Name="BotEyeScaleR" ScaleY="1.0"/>
-                                    </Ellipse.RenderTransform>
-                                </Ellipse>
-                            </StackPanel>
+                            <!-- Expressive Eyes Container (Blinking support) -->
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,9,0,0" RenderTransformOrigin="0.5,0.5">
+                                <Grid.RenderTransform>
+                                    <ScaleTransform x:Name="BotEyesScale" ScaleY="1.0"/>
+                                </Grid.RenderTransform>
+                                <StackPanel Orientation="Horizontal">
+                                    <Path x:Name="BotLeftEyePath"
+                                          Data="M 0,4 Q 3.5,0 7,4"
+                                          Stroke="#1E4010"
+                                          StrokeThickness="1.8"
+                                          StrokeStartLineCap="Round"
+                                          StrokeEndLineCap="Round"
+                                          Margin="0,0,5,0"/>
+                                    <Path x:Name="BotRightEyePath"
+                                          Data="M 0,4 Q 3.5,0 7,4"
+                                          Stroke="#1E4010"
+                                          StrokeThickness="1.8"
+                                          StrokeStartLineCap="Round"
+                                          StrokeEndLineCap="Round"/>
+                                </StackPanel>
+                            </Grid>
 
-                            <!-- Dynamic mouth: smile arc vs sad frown -->
+                            <!-- Dynamic Mouth -->
                             <Path x:Name="BotMouthPath"
-                                  Data="M 8.5,13.5 Q 11,16.5 13.5,13.5"
-                                  Stroke="#FFFFFF"
-                                  StrokeThickness="1"
+                                  Data="M 0,0 Q 4.5,5 9,0"
+                                  Stroke="#1E4010"
+                                  StrokeThickness="1.8"
                                   StrokeStartLineCap="Round"
                                   StrokeEndLineCap="Round"
-                                  Opacity="0.9"/>
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Top"
+                                  Margin="0,18,0,0"/>
+
+                            <!-- Sleepy Yawn Mouth (used specifically in Sleepy mood) -->
+                            <Ellipse x:Name="BotSleepyMouth"
+                                     Width="5" Height="6"
+                                     Fill="#102848"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Top"
+                                     Margin="0,17,0,0"
+                                     Visibility="Collapsed"/>
                         </Grid>
                     </StackPanel>
 
-                    <!-- Range Selector (30D / 6M) + Settings Gear -->
+                    <!-- Range Selector (30D / 6M / 1Y) + Settings Gear -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                         <Border x:Name="RangeSwitchBorder" Background="#15FFFFFF" BorderBrush="#2058D77B" BorderThickness="1" CornerRadius="5" Padding="2">
                             <StackPanel Orientation="Horizontal">
                                 <Button x:Name="Btn30D" Content="30D" Style="{StaticResource RangeBtnStyle}" Height="19" FontSize="9" FontWeight="Bold" Background="Transparent" Foreground="#888888" BorderThickness="0" Click="Btn30D_Click"/>
                                 <Button x:Name="Btn6M" Content="6M" Style="{StaticResource RangeBtnStyle}" Height="19" FontSize="9" FontWeight="Bold" Background="#3358D77B" Foreground="#58D77B" BorderThickness="0" Click="Btn6M_Click"/>
+                                <Button x:Name="Btn1Y" Content="1Y" Style="{StaticResource RangeBtnStyle}" Height="19" FontSize="9" FontWeight="Bold" Background="Transparent" Foreground="#888888" BorderThickness="0" Click="Btn1Y_Click"/>
                             </StackPanel>
                         </Border>
 

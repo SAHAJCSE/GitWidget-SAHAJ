@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using GitHubDesktopWidget.Models;
+using GitHubDesktopWidget.Services;
 
 namespace GitHubDesktopWidget
 {
@@ -31,6 +32,7 @@ namespace GitHubDesktopWidget
             UpdateThemeUI(_config.Theme);
             UpdateShapeUI(_config.Shape);
             UpdateRangeUI(_config.Range);
+            UpdateSoundSwitch(!_config.MuteSound);
             UpdatePinSwitch(!_config.Topmost);
             UpdateLockSwitch(_config.Locked);
             UpdateStartupSwitch(CheckStartupEnabled());
@@ -156,11 +158,37 @@ namespace GitHubDesktopWidget
             UpdateRangeUI("6m");
         }
 
+        private void Range1Y_Click(object sender, MouseButtonEventArgs e)
+        {
+            _mainWindow.SetRange("1y");
+            UpdateRangeUI("1y");
+        }
+
         private void UpdateRangeUI(string range)
         {
-            bool is30d = range == "30d";
+            string r = (range ?? "6m").ToLowerInvariant();
+            bool is30d = r == "30d";
+            bool is6m = r == "6m";
+            bool is1y = r == "1y" || r == "12m";
+
             Range30DBtn.Background = is30d ? (SolidColorBrush)new BrushConverter().ConvertFromString("#2C2C32")! : Brushes.Transparent;
-            Range6MBtn.Background = !is30d ? (SolidColorBrush)new BrushConverter().ConvertFromString("#2C2C32")! : Brushes.Transparent;
+            Range6MBtn.Background = is6m ? (SolidColorBrush)new BrushConverter().ConvertFromString("#2C2C32")! : Brushes.Transparent;
+            Range1YBtn.Background = is1y ? (SolidColorBrush)new BrushConverter().ConvertFromString("#2C2C32")! : Brushes.Transparent;
+        }
+
+        private void ToggleSound_Click(object sender, MouseButtonEventArgs e)
+        {
+            _config.MuteSound = !_config.MuteSound;
+            SoundService.IsMuted = _config.MuteSound;
+            UpdateSoundSwitch(!_config.MuteSound);
+        }
+
+        private void UpdateSoundSwitch(bool isEnabled)
+        {
+            ToggleSoundSwitch.Background = isEnabled
+                ? (SolidColorBrush)new BrushConverter().ConvertFromString("#34C759")!
+                : (SolidColorBrush)new BrushConverter().ConvertFromString("#38383E")!;
+            ToggleSoundThumb.HorizontalAlignment = isEnabled ? HorizontalAlignment.Right : HorizontalAlignment.Left;
         }
 
         private void TogglePin_Click(object sender, MouseButtonEventArgs e)

@@ -22,6 +22,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Setup\**" />
+    <Page Remove="Setup\**" />
+    <None Remove="Setup\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Assets\icon.ico" />
   </ItemGroup>
 </Project>

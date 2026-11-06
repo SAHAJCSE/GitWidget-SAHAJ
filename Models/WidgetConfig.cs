@@ -8,6 +8,8 @@ namespace GitHubDesktopWidget.Models
         public string Shape { get; set; } = "circle";
         public bool Locked { get; set; } = false;
         public bool Topmost { get; set; } = false;
+        public bool MuteSound { get; set; } = false;
+        public string? BotMood { get; set; } = null;
         public double X { get; set; } = -1;
         public double Y { get; set; } = -1;
         public double Width { get; set; } = 580;

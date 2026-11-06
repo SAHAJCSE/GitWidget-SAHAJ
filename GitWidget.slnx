@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="GithubWidget.csproj" />
+  <Project Path="Setup/GitWidgetSetup.csproj" />
+</Solution>
