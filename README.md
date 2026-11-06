@@ -44,61 +44,87 @@ GitWidget is a small desktop widget that lets you check your GitHub activity wit
 <a id="-screenshots" name="-screenshots"></a>
 ## Screenshots
 
-### Contribution Heatmap
+<br />
 
-**6-Month & 1-Year Views**
+### Contribution Heatmaps
+
+<br />
+
+#### **Panoramic 6-Month Timeline View**
 
 <p align="center">
-  <img src="images/6monthgraph.png" width="90%" alt="GitWidget 6-month contribution heatmap" />
-  <br /><br />
-  <img src="images/1yeargraph.png" width="90%" alt="GitWidget 1-year contribution heatmap" />
+  <img src="images/6monthgraph.png" width="92%" alt="GitWidget 6-month contribution heatmap" />
 </p>
 
-### 30-Day Views
+<br /><br />
+
+#### **Panoramic 1-Year Annual View**
+
+<p align="center">
+  <img src="images/1yeargraph.png" width="92%" alt="GitWidget 1-year contribution heatmap" />
+</p>
+
+<br /><br />
+
+### 30-Day Compact Views
+
+<br />
 
 <table>
   <tr>
     <td width="50%" align="center">
-      <b>Apple Monochrome</b>
+      <br />
+      <b>Apple Monochrome (B&amp;W)</b>
       <br /><br />
-      <img src="images/image30Dblackandwhite.png" width="100%" alt="Apple monochrome theme" />
+      <img src="images/image30Dblackandwhite.png" width="92%" alt="Apple monochrome theme" />
+      <br /><br />
     </td>
     <td width="50%" align="center">
+      <br />
       <b>Liquid Glass</b>
       <br /><br />
-      <img src="images/liquidglass30d.png" width="100%" alt="Liquid glass theme" />
+      <img src="images/liquidglass30d.png" width="92%" alt="Liquid glass theme" />
+      <br /><br />
     </td>
   </tr>
   <tr>
     <td width="50%" align="center">
+      <br />
       <b>GitHub Classic</b>
       <br /><br />
-      <img src="images/classic30d.png" width="100%" alt="GitHub classic theme" />
+      <img src="images/classic30d.png" width="92%" alt="GitHub classic theme" />
+      <br /><br />
     </td>
     <td width="50%" align="center">
+      <br />
+      <b>GitHub Dark</b>
+      <br /><br />
+      <img src="images/githubdark30.png" width="92%" alt="GitHub dark theme" />
+      <br /><br />
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <br />
       <b>Aurora Teal</b>
       <br /><br />
-      <img src="images/blueaurora30D.png" width="100%" alt="Aurora teal theme" />
+      <img src="images/blueaurora30D.png" width="50%" alt="Aurora teal theme" />
+      <br /><br />
     </td>
   </tr>
 </table>
 
-### Settings & Activity Details
+<br /><br />
 
-<table>
-  <tr>
-    <td width="50%" align="center">
-      <b>Settings</b>
-      <br /><br />
-      <img src="images/settings1.png" width="100%" alt="Settings panel" />
-    </td>
-    <td width="50%" align="center">
-      <b>Activity Analytics</b>
-      <br /><br />
-      <img src="images/detailedanalysis.png" width="100%" alt="Activity analytics" />
-    </td>
-  </tr>
-</table>
+### Activity Analytics &amp; Deep Details
+
+<br />
+
+<p align="center">
+  <img src="images/detailedanalysis.png" width="92%" alt="Activity analytics and details" />
+</p>
+
+<br /><br />
 
 ## Features
 
